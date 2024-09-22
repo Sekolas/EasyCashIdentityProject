@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EasyCashIdentityProject.DataAccessLayer.Migrations
 {
-    [DbContext(typeof(context))]
+    [DbContext(typeof(Context))]
     [Migration("20240922081709_mig_add_relation_customerAccount_appUser")]
     partial class mig_add_relation_customerAccount_appUser
     {

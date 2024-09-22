@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EasyCashIdentityProject.DataAccessLayer.Migrations
 {
-    [DbContext(typeof(context))]
+    [DbContext(typeof(Context))]
     partial class contextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
