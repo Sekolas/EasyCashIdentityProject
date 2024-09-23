@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EasyCashIdentityProject.DataAccessLayer.Migrations
 {
-    [DbContext(typeof(context))]
+    [DbContext(typeof(Context))]
     partial class contextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -22,7 +22,37 @@ namespace EasyCashIdentityProject.DataAccessLayer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EasyCashIdentityProject.EntityLayer.AppUser", b =>
+            modelBuilder.Entity("EasyCashIdentityProject.EntityLayer.concrete.AppRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("EasyCashIdentityProject.EntityLayer.concrete.AppUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -40,6 +70,9 @@ namespace EasyCashIdentityProject.DataAccessLayer.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ConfirmCode")
+                        .HasColumnType("int");
 
                     b.Property<string>("District")
                         .IsRequired()
@@ -108,36 +141,6 @@ namespace EasyCashIdentityProject.DataAccessLayer.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("EasyCashProject.EntityLayer.Concrete.AppRole", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("EasyCashProject.EntityLayer.Concrete.CustomerAccount", b =>
@@ -300,7 +303,7 @@ namespace EasyCashIdentityProject.DataAccessLayer.Migrations
 
             modelBuilder.Entity("EasyCashProject.EntityLayer.Concrete.CustomerAccount", b =>
                 {
-                    b.HasOne("EasyCashIdentityProject.EntityLayer.AppUser", "Appuser")
+                    b.HasOne("EasyCashIdentityProject.EntityLayer.concrete.AppUser", "Appuser")
                         .WithMany("CustomerAccounts")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -311,7 +314,7 @@ namespace EasyCashIdentityProject.DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("EasyCashProject.EntityLayer.Concrete.AppRole", null)
+                    b.HasOne("EasyCashIdentityProject.EntityLayer.concrete.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -320,7 +323,7 @@ namespace EasyCashIdentityProject.DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("EasyCashIdentityProject.EntityLayer.AppUser", null)
+                    b.HasOne("EasyCashIdentityProject.EntityLayer.concrete.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -329,7 +332,7 @@ namespace EasyCashIdentityProject.DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("EasyCashIdentityProject.EntityLayer.AppUser", null)
+                    b.HasOne("EasyCashIdentityProject.EntityLayer.concrete.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -338,13 +341,13 @@ namespace EasyCashIdentityProject.DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("EasyCashProject.EntityLayer.Concrete.AppRole", null)
+                    b.HasOne("EasyCashIdentityProject.EntityLayer.concrete.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EasyCashIdentityProject.EntityLayer.AppUser", null)
+                    b.HasOne("EasyCashIdentityProject.EntityLayer.concrete.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -353,14 +356,14 @@ namespace EasyCashIdentityProject.DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("EasyCashIdentityProject.EntityLayer.AppUser", null)
+                    b.HasOne("EasyCashIdentityProject.EntityLayer.concrete.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EasyCashIdentityProject.EntityLayer.AppUser", b =>
+            modelBuilder.Entity("EasyCashIdentityProject.EntityLayer.concrete.AppUser", b =>
                 {
                     b.Navigation("CustomerAccounts");
                 });

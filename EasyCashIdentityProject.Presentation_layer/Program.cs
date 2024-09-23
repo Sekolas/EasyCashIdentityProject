@@ -1,7 +1,13 @@
+using EasyCashIdentityProject.DataAccessLayer.concrete;
+using EasyCashIdentityProject.EntityLayer.concrete;
+using EasyCashIdentityProject.Presentation_layer.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<Context>();
+builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<Context>().AddErrorDescriber<CustomIdentityValidator>();
 
 var app = builder.Build();
 
@@ -17,6 +23,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
